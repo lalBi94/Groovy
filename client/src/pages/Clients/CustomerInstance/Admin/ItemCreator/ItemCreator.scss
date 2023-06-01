@@ -1,0 +1,43 @@
+@import "../../../../../style/Core";
+
+#item-creator-container {
+  #item-creator-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 150px;
+
+    #item-creator-previews {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 20px
+    }
+
+    #item-creator-form {
+      width: 600px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      border: 1px solid $tri_color;
+      background: $main_color;
+      padding: 20px;
+
+      .item-creator-options {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    .item-creator-img {
+      width: 350px;
+      height: 350px;
+      box-shadow: 0px 0px 50px 10px $tri_color;
+      background: $main_color;
+    }
+  }
+}

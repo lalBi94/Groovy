@@ -1,0 +1,18 @@
+@import "../../style/Core";
+
+#genbutton-btn {
+  background: black;
+  color: white;
+  border: 2px solid black;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#genbutton-btn:hover {
+  background: $secondary_color;
+}

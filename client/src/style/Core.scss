@@ -1,0 +1,38 @@
+$main_color: white;
+$secondary_color: #343434;
+$tri_color: #282424;
+
+$resp_change: 800px;
+
+$text_size: 25px;
+$text_color: $main_color;
+$text_font: "Helvetica", sans-serif;
+
+$title_color: $secondary_color;
+$title_size: 5rem;
+
+::selection {
+    background: $tri_color;
+    color: $main_color;
+}
+
+body {
+    position: relative;
+    background: $main_color;
+    color: $tri_color;
+    font-size: $text_size;
+    margin: 0 auto;
+    font-family: $text_font;
+    overflow-x: clip;
+
+    .title {
+        font-size: $title_size;
+        color: $title_color;
+        font-weight: bold;
+    }
+
+    .text {
+        font-size: $text_size;
+        color: $tri_color;
+    }
+}

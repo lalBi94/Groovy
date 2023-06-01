@@ -1,0 +1,197 @@
+@import "../../style/Core";
+@import url('https://rsms.me/inter/inter.css');
+
+$width_form: 25vw;
+$height_form: 32vw;
+$pub_img: 32vw;
+
+:root {
+    --color-light: white;
+    --color-dark: #484848;
+    --color-signal: #0C0C0C;
+
+    --color-background: var(--color-light);
+    --color-text: var(--color-dark);
+    --color-accent: var(--color-signal);
+
+    --size-bezel: .5rem;
+    --size-radius: 4px;
+
+    line-height: 1.4;
+
+    font-size: calc(.6rem + .4vw);
+    color: var(--color-text);
+    font-weight: bold;
+
+    .input {
+        position: relative;
+
+        .must {
+            color: red;
+            font-weight: 900;
+        }
+
+        &__label {
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * .5);
+            margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * .5);
+            white-space: nowrap;
+            transform: translate(0, 0);
+            transform-origin: 0 0;
+            background: var(--color-background);
+            transition: transform 120ms ease-in;
+            font-weight: bold;
+            line-height: 1.2;
+            font-size: 1rem;
+            color: black;
+        }
+
+        &__field {
+            box-sizing: border-box;
+            display: block;
+            border: 3px solid currentColor;
+            padding: calc(var(--size-bezel) * 1.5) var(--size-bezel);
+            color: $secondary_color;
+            background: transparent;
+            border-radius: var(--size-radius);
+
+            &:focus,
+            &:not(:placeholder-shown) {
+                & + .input__label {
+                    transform: translate(.25rem, -65%) scale(.8);
+                    color: var(--color-accent);
+                }
+            }
+        }
+
+        .card {
+            background: var(--color-background);
+            padding: calc(4 * var(--size-bezel));
+            margin-top: calc(4 * var(--size-bezel));
+            border-radius: var(--size-radius);
+            border: 3px solid var(--color-shadow, currentColor);
+
+            &--inverted {
+                --color-background: var(--color-dark);
+                color: var(--color-light);
+                --color-shadow: var(--color-accent);
+            }
+
+            &--accent {
+                --color-background: var(--color-signal);
+                --color-accent: var(--color-light);
+                color: var(--color-dark);
+            }
+
+            *:first-child {
+                margin-top: 0;
+            }
+        }
+    }
+}
+
+#customers-container {
+    #customers-form-container {
+        .mustt {
+            font-size: 0.80rem;
+            color: red;
+            font-weight: 900;
+        }
+
+        #customers-form-connexion {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            #customers-form-register, #customers-form-login {
+                display: flex;
+                flex-direction: column;
+                background: $main_color;
+                justify-content: space-around;
+                position: relative;
+                align-items: center;
+                width: 350px;
+                height: $height_form;
+                box-shadow: 0px 0px 10px 2px $tri_color;
+
+                #customers-form-login-same {
+                    height: 30%;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                    justify-content: space-around;
+                }
+
+                #customer-login-remember {
+                    font-size: 1rem;
+                    display: flex;
+                    gap: 5px;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                #customers-btn-container {
+                    display: flex;
+                    flex-direction: row;
+                    width: 100%;
+                    justify-content: center;
+                    gap: 4%;
+
+                    .register:hover {
+                        border-radius: 10px;
+                        transition: 1s;
+                        background: 1.5px $secondary_color;
+                        color: white;
+                    }
+
+                    .login:hover {
+                        border-bottom-left-radius: 10px;
+                        transition: 1s;
+                        background: 1.5px $secondary_color;
+                        color: white;
+                    }
+                }
+            }
+
+            #customers-form-pub {
+                width: $pub_img;
+                height: $pub_img;
+
+                #customers-form-pub-yanti {
+                    width: $pub_img;
+                    height: $pub_img;
+                }
+            }
+        }
+
+        @media (max-width: $resp_change) {
+            #customers-form-connexion {
+                flex-direction: column;
+
+                #customers-form-login, #customers-form-register {
+                    background: transparent;
+                    min-height: 500px;
+
+                    .input {
+                        .input__field {
+                            background: $main_color;
+                        }
+
+                        .input__label {
+                            border-top: 3px solid $tri_color;
+                            border-left: 3px solid $tri_color;
+                            border-right: 3px solid $tri_color;
+                            border-radius: 15px;
+                        }
+                    }
+                }
+
+                #customers-form-pub {
+                    display: none;
+                }
+            }
+        }
+    }
+}

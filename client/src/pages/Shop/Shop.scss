@@ -1,0 +1,153 @@
+@import "../../style/Core";
+
+#shop-container {
+    #shop-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        #shop-items {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            width: 80%;
+            gap: 10px;
+
+            .shop-pagination-index-prime {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: row;
+                gap: 10px;
+                margin-bottom: 40px;
+                display: none;
+            }
+
+            @media (max-width: $resp-change) {
+                .shop-pagination-index-prime {
+                    display: flex;
+                }
+            }
+
+            .shop-item {
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                width: 250px;
+                height: 270px;
+                position: relative;
+
+                img {
+                    width: 150px;
+                    height: 150px;
+                    box-shadow: -15px -20px 40px $tri_color;
+                }
+
+                .info {
+                    font-size: 1.2rem;
+                }
+
+                .info-name {
+                    font-weight: bold;
+                }
+
+                .info-artist {
+                    font-size: 1rem;
+                    font-style: italic;
+                    color: #4b4b4b;
+                }
+
+                .info-price {
+                    position: absolute;
+                    top: 20px;
+                    left: 20px;
+                    transform: rotate(-15deg);
+                    color: $main_color;
+                    background: orange;
+                    padding: 2%;
+                    border: 2px solid transparent;
+                }
+            }
+
+            .shop-item:hover {
+                .info-price {
+                    background: black;
+                }
+
+                .info-name {
+                    color: #333333;
+                }
+
+                .info-artist {
+                    color: $secondary_color;
+                }
+            }
+        }
+    }
+
+    #shop-pagination {
+        position: relative;
+        display: flex;
+        width: 100%;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        color: $tri_color;
+        flex-wrap: wrap;
+
+        #shop-pagination-index {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+
+            .shop-pagination-links {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid $tri_color;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                text-decoration: none;
+                color: $tri_color;
+                background: white;
+            }
+
+            .shop-pagination-links-cur {
+                background: $tri_color;
+                color: white;
+            }
+        }
+
+        #shop-search {
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 8px;
+
+            #shop-searching {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: row;
+            }
+
+            #shop-filters {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+        }
+    }
+}

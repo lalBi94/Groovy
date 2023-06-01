@@ -1,0 +1,90 @@
+@import "../../style/Core";
+
+#home-container {
+    #home-vinyl-container {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+
+        #home-vinyl-turn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            width: 100%;
+
+            #home-vinyl {
+                width: 400px;
+                height: auto;
+                display: flex;
+                justify-content: center;
+            }
+
+            @media (max-width: $resp_change) {
+                #home-vinyl {
+                    width: 225px;
+                }
+            }
+
+            #home-order {
+                display: none;
+                text-decoration: none;
+                padding: 1%;
+                font-weight: bold;
+
+                button {
+                    width: 150px;
+                    height: 100px;
+                }
+            }
+
+            #home-order:hover {
+                transition: 1s;
+                border-radius: 20px;
+                color: white;
+            }
+        }
+
+        #home-vinyl-turn:hover {
+            animation: slideLeft 0.8s linear forwards;
+
+            #home-vinyl {
+                animation: spin 2s linear infinite;
+            }
+
+            #home-order {
+                display: inline-block;
+                animation: slideRight 0.8s linear forwards;
+            }
+        }
+    }
+}
+
+@keyframes slideRight {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(20%);
+    }
+}
+
+@keyframes slideLeft {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-10%);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

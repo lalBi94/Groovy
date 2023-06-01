@@ -1,0 +1,92 @@
+@import "../../../../../style/Core";
+
+#promotioncreator-container {
+  #promotioncreator-vinyls-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+
+    #promotioncreator-vinyls-controls {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: green;
+      background: white;
+      border: 1px solid black;
+      border-radius: 15px;
+      padding: 20px;
+
+      #promotioncreator-vinyls-controls-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 200px;
+          height: 200px;
+          box-shadow: 0px 0px 10px 0px $tri_color;
+        }
+      }
+
+      #promotioncreator-vinyls-controls-settings {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 15px;
+
+        form {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+        }
+      }
+    }
+
+    #promotioncreator-vinyls {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+      width: 60%;
+
+      .choosing {
+        background: green;
+      }
+
+      .promotioncreator-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        .promotioncreator-card-alreadypromotion {
+          top: 5px;
+          background: red;
+          padding: 5px;
+          color: white;
+          position: absolute;
+        }
+
+        img {
+          width: 200px;
+          height: 200px;
+          box-shadow: -10px -10px 40px 0px $tri_color;
+        }
+      }
+    }
+
+    #promotioncreator-vinyls-search {
+      width: 300px;
+    }
+  }
+}

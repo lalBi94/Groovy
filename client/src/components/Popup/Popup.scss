@@ -1,0 +1,48 @@
+@import "../../style/Core";
+
+.popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.popup-content {
+  position: relative;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+
+}
+
+.popup-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.8;
+  z-index: 999;
+}
+
+.popup-container::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 998;
+}

@@ -1,0 +1,23 @@
+@import "../../../../style/Core";
+
+#admin-container {
+  #admin-tools-links-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    #admin-tools-title {
+      font-size: 1.4rem;
+      color: $main_color;
+      background: $tri_color;
+      padding: 13px;
+      border-radius: 15px;
+    }
+
+    .admin-tools-links {
+      text-decoration: none;
+    }
+  }
+}
