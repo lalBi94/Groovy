@@ -45,12 +45,14 @@ export default function Product() {
                     setProduct(data)
 
                     getUserWishList()
-                        .then((res) => {
-                            res.forEach((e) => {
+			.then((res) => {
+			   if(res) {
+                              res.forEach((e) => {
                                 if(e.itemid === data.id) {
                                     setIsInWishList(true)
                                 }
                             })
+			   }
                         })
                 })
         } catch(err) {
