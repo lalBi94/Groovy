@@ -7,6 +7,12 @@
     padding-bottom: 50px;
   }
 
+  #slider-title {
+    display: flex;
+    width: 100%;
+    justify-content: right;
+  }
+
   .swiper-slide {
     display: flex;
     flex-direction: column;

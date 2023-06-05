@@ -48,18 +48,25 @@ export default function Home() {
 					<span>Hello { userData.user } !</span>
 					: null }
 
-					{ alaffiche ? <Slider data={alaffiche} />
+					{ alaffiche ? <div id="home-alaffiche-container">
+						<span className="alaffiche-title">A l'affiche</span>
+						<Slider data={alaffiche} />
+					</div>
 					: <Loader /> }
 
 
-				<div id="home-vinyl-turn">
-					<img src={Vinyl} id="home-vinyl" alt="vinyl qui tourne" />
+				<div id="home-vinyl-turn-container">
+					<span className="selection-title">Selection</span>
 
-					<Link to="/shop" id="home-order">
-						<GenButton
-							text="Click here"
-							persostyle={{width: "100px", height: "50px"}}/>
-					</Link>
+					<div id="home-vinyl-turn">
+						<img src={Vinyl} id="home-vinyl" alt="vinyl qui tourne" />
+
+						<Link to="/shop" id="home-order">
+							<GenButton
+								text="Click here"
+								persostyle={{width: "100px", height: "50px"}}/>
+						</Link>
+					</div>
 				</div>
 			</main>
 		</div>

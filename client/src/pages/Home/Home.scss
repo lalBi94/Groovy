@@ -7,56 +7,82 @@
         flex-direction: column;
         align-items: center;
         gap: 30px;
+        position: relative;
 
-        #home-vinyl-turn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            width: 100%;
-
-            #home-vinyl {
-                width: 400px;
-                height: auto;
-                display: flex;
-                justify-content: center;
-            }
-
-            @media (max-width: $resp_change) {
-                #home-vinyl {
-                    width: 225px;
-                }
-            }
-
-            #home-order {
-                display: none;
-                text-decoration: none;
-                padding: 1%;
-                font-weight: bold;
-
-                button {
-                    width: 150px;
-                    height: 100px;
-                }
-            }
-
-            #home-order:hover {
-                transition: 1s;
-                border-radius: 20px;
-                color: white;
-            }
+        .alaffiche-title, .selection-title {
+            background: black;
+            color: white;
+            padding: 10px;
         }
 
-        #home-vinyl-turn:hover {
-            animation: slideLeft 0.8s linear forwards;
+        #home-alaffiche-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
 
-            #home-vinyl {
-                animation: spin 2s linear infinite;
+        #home-vinyl-turn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+
+            #home-vinyl-turn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: row;
+                overflow: hidden;
+                width: 100%;
+                padding-top: 50px;
+                padding-bottom: 50px;
+    
+                #home-vinyl {
+                    width: 400px;
+                    height: auto;
+                    display: flex;
+                    justify-content: center;
+                }
+    
+                @media (max-width: $resp_change) {
+                    #home-vinyl {
+                        width: 225px;
+                    }
+                }
+    
+                #home-order {
+                    display: none;
+                    text-decoration: none;
+                    padding: 1%;
+                    font-weight: bold;
+    
+                    button {
+                        width: 150px;
+                        height: 100px;
+                    }
+                }
+    
+                #home-order:hover {
+                    transition: 1s;
+                    border-radius: 20px;
+                    color: white;
+                }
             }
-
-            #home-order {
-                display: inline-block;
-                animation: slideRight 0.8s linear forwards;
+    
+            #home-vinyl-turn:hover {
+                animation: slideLeft 0.8s linear forwards;
+    
+                #home-vinyl {
+                    animation: spin 2s linear infinite;
+                }
+    
+                #home-order {
+                    display: inline-block;
+                    animation: slideRight 0.8s linear forwards;
+                }
             }
         }
     }
