@@ -5,25 +5,104 @@ import GenButton from "../../components/GenButton/GenButton"
 import TextFields from "../../components/TextFields/TextFields"
 import { fetchItems } from "../../components/ClientAPI/ItemsAPI"
 import Loader from "../../components/Loader/Loader";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowRight, faFilter, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 export default function Shop() {
     const [items, setItems] = useState({})
     const [showedItems, setShowedItems] = useState({})
     const [curIndex, setCurIndex] = useState(0)
 
+    const [betweenPriceX, setBetweenPriceX] = useState(0)
+    const [betweenPriceY, setBetweenPriceY] = useState(0)
+
     const [showPromotion, setShowPromotion] = useState(false)
     const [showCroissant, setShowCroissant] = useState(false)
     const [showDecroissant, setShowDecroissant] = useState(false)
     const [showStock, setShowStock] = useState(false)
+    const [showBetweenPrice, setShowBetweenPrice] = useState(false)
+    const [showUsed, setShowUsed] = useState(false)
+    const [showNew, setShowNew] = useState(false)
 
+    const [inFilter, setInFilter] = useState(false)
+
+    /**
+     * @desc Used handler
+     * */
+    function handleUsed() {
+        if(!showUsed) {
+            setShowDecroissant(false)
+            setShowStock(false)
+            setShowPromotion(false)
+            setShowBetweenPrice(false)
+            setShowNew(false)
+
+            let newItems = []
+
+            items.forEach((e) => {
+                if(e.state === "Used") {
+                    newItems.push(e)
+                }
+            })
+
+            setCurIndex(0)
+            setShowedItems(fragment(newItems, 8))
+            setShowUsed(!showUsed)
+        } else {
+            showAll()
+            setShowUsed(!showUsed)
+        }
+    }
+
+    /**
+     * @desc New handler
+     * */
+    function handleNew() {
+        if(!showNew) {
+            setShowDecroissant(false)
+            setShowStock(false)
+            setShowPromotion(false)
+            setShowBetweenPrice(false)
+            setShowUsed(false)
+
+            let newItems = []
+
+            items.forEach((e) => {
+                if(e.state === "New") {
+                    newItems.push(e)
+                }
+            })
+
+            setCurIndex(0)
+            setShowedItems(fragment(newItems, 8))
+            setShowNew(!showNew)
+        } else {
+            showAll()
+            setShowNew(!showNew)
+        }
+    }
+
+    /**
+     * @desc Go to product page of item id
+     * @param { number } id The item id.
+     * */
     function handleProduct(id) {
         window.location = `/shop/product?id=${id}`
     }
 
+    /**
+     * @desc Swicth ON/OFF for filters menu
+     * */
+    function handleFilter() {
+        setInFilter(!inFilter)
+    }
+
+    /**
+     * @desc Show all items
+     * */
     function showAll() {
         setCurIndex(0)
         setShowedItems(fragment(items, 8))
-        return
     }
 
     /**
@@ -34,6 +113,9 @@ export default function Shop() {
             setShowDecroissant(false)
             setShowStock(false)
             setShowPromotion(false)
+            setShowBetweenPrice(false)
+            setShowUsed(false)
+            setShowNew(false)
 
             let newItems = [...items]
             newItems.sort((a, b) => a.price - b.price)
@@ -42,11 +124,9 @@ export default function Shop() {
             setShowedItems(fragment(newItems, 8))
 
             setShowCroissant(!showCroissant)
-            return
         } else {
             showAll()
             setShowCroissant(!showCroissant)
-            return
         }
     }
 
@@ -58,6 +138,9 @@ export default function Shop() {
             setShowCroissant(false)
             setShowPromotion(false)
             setShowStock(false)
+            setShowBetweenPrice(false)
+            setShowUsed(false)
+            setShowNew(false)
 
             let newItems = [...items]
             newItems.sort((a, b) => (a.price < b.price ? 1 : -1))
@@ -66,12 +149,10 @@ export default function Shop() {
             setShowedItems(fragment(newItems, 8))
 
             setShowDecroissant(!showDecroissant)
-            return
         } else {
             setCurIndex(0)
             setShowedItems(fragment(items, 8))
             setShowDecroissant(!showDecroissant)
-            return
         }
     }
 
@@ -83,6 +164,9 @@ export default function Shop() {
             setShowCroissant(false)
             setShowPromotion(false)
             setShowDecroissant(false)
+            setShowBetweenPrice(false)
+            setShowUsed(false)
+            setShowNew(false)
 
             let newItems = []
 
@@ -95,12 +179,50 @@ export default function Shop() {
             setCurIndex(0)
             setShowedItems(fragment(newItems, 8))
             setShowStock(!showStock)
-            return
         } else {
             setCurIndex(0)
             setShowedItems(fragment(items, 8))
             setShowStock(!showStock)
-            return
+        }
+    }
+
+    /**
+     * @desc Between x and y register
+     * */
+    function handleXYBetweenChange(event, l) {
+        setShowBetweenPrice(false)
+
+        l === "x" ? setBetweenPriceX(event.target.value) :
+            setBetweenPriceY(event.target.value)
+    }
+
+    /**
+     * @desc Between x and y items
+     * */
+    function handleBetweenPrice() {
+        if(!showBetweenPrice) {
+            setShowCroissant(false)
+            setShowDecroissant(false)
+            setShowStock(false)
+            setShowPromotion(false)
+            setShowUsed(false)
+            setShowNew(false)
+
+            let newItems = []
+
+            items.forEach((e) => {
+                if(e.price >= betweenPriceX && e.price <= betweenPriceY) {
+                    newItems.push(e)
+                }
+            })
+
+            setCurIndex(0)
+            setShowedItems(fragment(newItems, 8))
+            setShowBetweenPrice(!showBetweenPrice)
+        } else {
+            setCurIndex(0)
+            setShowedItems(fragment(items, 8))
+            setShowBetweenPrice(!showBetweenPrice)
         }
     }
 
@@ -112,6 +234,9 @@ export default function Shop() {
             setShowCroissant(false)
             setShowDecroissant(false)
             setShowStock(false)
+            setShowBetweenPrice(false)
+            setShowUsed(false)
+            setShowNew(false)
 
             let promotionItems = []
 
@@ -124,12 +249,10 @@ export default function Shop() {
             setCurIndex(0)
             setShowedItems(fragment(promotionItems, 8))
             setShowPromotion(!showPromotion)
-            return
         } else {
             setCurIndex(0)
             setShowedItems(fragment(items, 8))
             setShowPromotion(!showPromotion)
-            return
         }
     }
 
@@ -176,7 +299,6 @@ export default function Shop() {
 
         if(search === "") {
             setShowedItems(fragment(items, 8))
-            return
         }
 
         let newStock =  []
@@ -200,7 +322,6 @@ export default function Shop() {
 
         fetchItems()
             .then((res) => {
-                console.log(res)
                 setItems(res)
                 setShowedItems(fragment(res, 8))
             })
@@ -215,71 +336,151 @@ export default function Shop() {
                     <div id="shop-searching">
                         <TextFields oc={ (event) => {searching(event)} } placeholder="Search" />
                     </div>
-                    <div id="shop-filters">
-                        { !showPromotion ?
-                            <GenButton text="Promotion" persostyle={{
-                                background: "red",
-                                color: "white",
-                                fontWeight: "bold",
-                                width: "90px"
-                            }} handler={ handlePromotion } />
-                            :
-                            <GenButton text="Promotion" persostyle={{
-                                background: "green",
-                                color: "white",
-                                fontWeight: "bold",
-                                width: "90px"
-                            }} handler={ handlePromotion } />
-                        }
 
-                        { !showCroissant ?
-                            <GenButton text="- au + cher" persostyle={{
-                                background: "red",
-                                color: "white",
-                                fontWeight: "bold",
-                                width: "90px"
-                            }} handler={ handleCroissant } />
-                            :
-                            <GenButton text="- au + cher" persostyle={{
-                                background: "green",
-                                color: "white",
-                                fontWeight: "bold",
-                                width: "90px"
-                            }} handler={ handleCroissant } />
-                        }
-
-                        { !showDecroissant ?
-                            <GenButton text="+ au - cher" persostyle={{
-                                background: "red",
-                                color: "white",
-                                fontWeight: "bold",
-                                width: "90px"
-                            }} handler={ handleDecroissant } />
-                            :
-                            <GenButton text="+ au - cher" persostyle={{
-                                background: "green",
-                                color: "white",
-                                fontWeight: "bold",
-                                width: "90px"
-                            }} handler={ handleDecroissant } />
-                        }
-
-                        { !showStock ?
-                            <GenButton text="in Stock" persostyle={{
-                                background: "red",
-                                color: "white",
-                                fontWeight: "bold",
-                                width: "90px"
-                            }} handler={ handleStock } />
-                            :
-                            <GenButton text="in Stock" persostyle={{
-                                background: "green",
-                                color: "white",
-                                fontWeight: "bold",
-                                width: "90px"
-                            }} handler={ handleStock } />
-                        }
+                    <div id="shop-burger-filters">
+                        <FontAwesomeIcon icon={faFilter} onClick={handleFilter}/>
                     </div>
+
+                    { inFilter ?
+                        <div id="shop-filters">
+                            <span className="shop-filters-close" onClick={handleFilter}>
+                                <FontAwesomeIcon icon={faXmark} />
+                            </span>
+
+                            <div className="shop-filters-card">
+                                <span>Condition</span>
+
+                                <div className="shop-filters-btn-container">
+                                    { !showUsed ?
+                                        <GenButton text="Used" persostyle={{
+                                            background: "red",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleUsed } />
+                                        :
+                                        <GenButton text="Used" persostyle={{
+                                            background: "green",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleUsed } />
+                                    }
+
+                                    { !showNew ?
+                                        <GenButton text="New" persostyle={{
+                                            background: "red",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleNew } />
+                                        :
+                                        <GenButton text="New" persostyle={{
+                                            background: "green",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleNew } />
+                                    }
+                                </div>
+                            </div>
+
+                            <div className="shop-filters-card">
+                                <span>Price</span>
+
+                                <div className="shop-filters-btn-container">
+                                    { !showCroissant ?
+                                        <GenButton text="- au + cher" persostyle={{
+                                            background: "red",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleCroissant } />
+                                        :
+                                        <GenButton text="- au + cher" persostyle={{
+                                            background: "green",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleCroissant } />
+                                    }
+
+                                    { !showDecroissant ?
+                                        <GenButton text="+ au - cher" persostyle={{
+                                            background: "red",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleDecroissant } />
+                                        :
+                                        <GenButton text="+ au - cher" persostyle={{
+                                            background: "green",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleDecroissant } />
+                                    }
+
+                                    <TextFields min={0} type="number" persostyle={{width: "40px" }} oc={(event) => { handleXYBetweenChange(event, "X") }}/>
+                                    <FontAwesomeIcon icon={faArrowRight} />
+                                    <TextFields min={1} type="number" persostyle={{width: "40px" }} oc={(event) => { handleXYBetweenChange(event, "Y") }}/>
+                                    { !showBetweenPrice ?
+                                        <GenButton text="Ok" persostyle={{
+                                            background: "red",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleBetweenPrice } />
+                                        :
+                                        <GenButton text="Ok" persostyle={{
+                                            background: "green",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleBetweenPrice } />
+                                    }
+                                </div>
+                            </div>
+
+                            <div className="shop-filters-card">
+                                <span>Other</span>
+
+                                <div className="shop-filters-btn-container">
+                                    { !showPromotion ?
+                                        <GenButton text="Promotion" persostyle={{
+                                            background: "red",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handlePromotion } />
+                                        :
+                                        <GenButton text="Promotion" persostyle={{
+                                            background: "green",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handlePromotion } />
+                                    }
+
+                                    { !showStock ?
+                                        <GenButton text="in Stock" persostyle={{
+                                            background: "red",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleStock } />
+                                        :
+                                        <GenButton text="in Stock" persostyle={{
+                                            background: "green",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            width: "90px"
+                                        }} handler={ handleStock } />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    : null }
                 </div>
 
                 <div id="shop-pagination-index">
