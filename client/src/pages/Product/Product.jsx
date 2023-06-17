@@ -8,6 +8,7 @@ import {faHeart, faMusic} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {getUserWishList, insertItemWishList, removeItemWishList} from "../../components/ClientAPI/ClientAPI";
 import Cookie from "js-cookie";
+import {Link} from "react-router-dom";
 
 export default function Product() {
     const [product, setProduct] = useState(null)
@@ -85,8 +86,13 @@ export default function Product() {
 
                         <span className="product-name">
                             { product.name }
-                            <span className="product-album"> from "{ product.album }"</span>
+                            <span className="product-album"> from "{ product.album }" ({product.Year})</span>
                         </span>
+
+                        <Link
+                            target="_blank"
+                            to="https://www.cdandlp.com/records-grading/"
+                            className="product-grad">Grading: { product.grading }</Link>
 
                         { product.desc !== "" ?
                             <span className="product-desc"> {product.desc} </span>

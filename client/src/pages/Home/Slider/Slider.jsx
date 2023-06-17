@@ -4,6 +4,10 @@ import "./Slider.scss";
 import { EffectCoverflow, Pagination } from "swiper";
 
 export default function Slider({ data }) {
+    /**
+     * @desc Redirection on product item page
+     * @param { number } n The item id
+     * */
     function handlerClick(n) {
         window.location = `/shop/product?id=${n}`
     }

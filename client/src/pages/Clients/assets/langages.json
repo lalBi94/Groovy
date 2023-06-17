@@ -1,0 +1,14 @@
+{
+  "fr": {
+    "login": "Connexion",
+    "username": "Pseudo",
+    "password": "Mot de passe",
+    "captcha": "Resoudre ",
+    "remember": "Se souvenir de moi",
+    "loginnow": "Connexion",
+    "registerhere": "Inscrivez-vous",
+    "require": "* est requis",
+    "phone": "N. de téléphone",
+    "confirmpassword": "Confirmez votre mot de passe"
+  }
+}

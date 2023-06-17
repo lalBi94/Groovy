@@ -1,4 +1,3 @@
-import {fromByteArray} from "base64-js";
 import Crypto from "crypto-js"
 
 /**

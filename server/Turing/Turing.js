@@ -119,4 +119,10 @@ export default class Turing {
             resolve(this.store.getAlaffiche())
         })
     }
+
+    modifyClientInfos(token, what, newvalue) {
+        return new Promise((resolve, reject) => {
+            resolve(this.rotors.modifyClientInfos(token, what, newvalue))
+        })
+    }
 }

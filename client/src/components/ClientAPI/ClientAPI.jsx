@@ -38,6 +38,7 @@ export async function insertItemWishList(itemid) {
  * */
 export async function removeItemWishList(itemid) {
     const token = await Cookie.get("token")
+
     if(token) {
         await axios.post("/removeWishListItem", {itemid, token})
     }
@@ -63,4 +64,18 @@ export async function getUserWishList() {
  * */
 export function isAdmin(user) {
     return user.permission === 777
+}
+
+/**
+ * @desc Modify user data
+ * @param { string } what Information to modify
+ * @param { string } newvalue The new value
+ * */
+export async function modifyClientInfo(what, newvalue) {
+    const token = await Cookie.get("token")
+
+    if(token) {
+        const data = await axios.post("/modifyClientInfos", {token, what, newvalue})
+        return data.data
+    }
 }

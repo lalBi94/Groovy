@@ -1,14 +1,16 @@
 import "./CustomerInstance.scss"
-import {useEffect, useState} from "react";
-import Cookie from "js-cookie";
-import { getUserData } from "../../../components/ClientAPI/ClientAPI"
-import NavBar from "../../../components/NavBar/NavBar";
-import Loader from "../../../components/Loader/Loader";
-import GenButton from "../../../components/GenButton/GenButton";
-import {isAdmin} from "../../../components/ClientAPI/ClientAPI";
+import {useEffect, useState} from "react"
+import Cookie from "js-cookie"
+import {getUserData, modifyClientInfo} from "../../../components/ClientAPI/ClientAPI"
+import NavBar from "../../../components/NavBar/NavBar"
+import Loader from "../../../components/Loader/Loader"
+import GenButton from "../../../components/GenButton/GenButton"
+import {isAdmin} from "../../../components/ClientAPI/ClientAPI"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faArrowRight, faCircleUser, faUser} from "@fortawesome/free-solid-svg-icons";
-import {convertDate} from "../../../components/ClientAPI/UtilsAPI";
+import {faCircleUser, faPen} from "@fortawesome/free-solid-svg-icons"
+import {convertDate} from "../../../components/ClientAPI/UtilsAPI"
+import Popup from "../../../components/Popup/Popup";
+import TextFields from "../../../components/TextFields/TextFields"
 
 export default function CustomerInstance() {
     const categorys = {
@@ -20,6 +22,93 @@ export default function CustomerInstance() {
     const [userData, setUserData] = useState({})
     const [activeCat, setActiveCat] = useState(categorys.settings.label)
 
+    const [isPseudoModifier, setIsPseudoModifier] = useState(false)
+    const [isEmailModifier, setIsEmailModifier] = useState(false)
+    const [isPhoneModifier, setIsPhoneModifier] = useState(false)
+
+    const [pseudoModify, setPseudoModify] = useState("")
+    const [emailModify, setEmailModify] = useState("")
+    const [phoneModify, setPhoneModify] = useState("")
+
+    function handlerRegisterInputs(event, fn) {
+        fn(event.target.value)
+    }
+
+    function handleModifier(what) {
+        switch(what) {
+            case "pseudo": {
+                setIsPseudoModifier(!isPseudoModifier)
+                break;
+            }
+
+            case "email": {
+                setIsEmailModifier(!isEmailModifier)
+                break;
+            }
+
+            case "phone": {
+                setIsPhoneModifier(!isPhoneModifier)
+                break;
+            }
+        }
+    }
+
+    function handleConfirmModification(what) {
+        switch(what) {
+            case "pseudo": {
+                setIsPseudoModifier(false)
+                handleModify("pseudo", pseudoModify)
+                break;
+            }
+
+            case "email": {
+                setIsEmailModifier(false)
+                handleModify("email", emailModify)
+                break;
+            }
+
+            case "phone": {
+                setIsPhoneModifier(false)
+                handleModify("phone", phoneModify)
+                break;
+            }
+        }
+    }
+
+    /**
+     * @desc Modify some information in db
+     * */
+    function handleModify(what, newvalue) {
+        modifyClientInfo(what, newvalue)
+            .then((res) => {
+                if(res) {
+                    res.created = convertDate(res.created)
+                    setUserData(res)
+                    openPopup("Succes", `${what} changed by ${newvalue}`)
+                } else {
+                    openPopup(`Error`, `${newvalue} already exist !`)
+                }
+            })
+    }
+
+    /**
+     * @desc Popup
+     * */
+    const [isPopupOpen, setIsPopupOpen] = useState(false)
+    const [popupInfos, setPopupInfos] = useState({
+        title: "",
+        text: ""
+    })
+
+    function openPopup(title, text) {
+        setPopupInfos({ title: title, text: text })
+        setIsPopupOpen(true)
+    }
+
+    function closePopup() {
+        setIsPopupOpen(false)
+    }
+
     /**
      * @desc Switch categorys
      * @param { string } which Category
@@ -28,6 +117,9 @@ export default function CustomerInstance() {
         setActiveCat(which)
     }
 
+    /**
+     * @desc Handler to disconnect user (delete the token cookie)
+     * */
     function handlerDisconnect() {
         Cookie.remove("token")
         window.location = "/home"
@@ -42,8 +134,7 @@ export default function CustomerInstance() {
         } else {
             getUserData()
                 .then((res) => {
-                    console.log(res.created)
-                    res.date = convertDate(res.created)
+                    res.data.created = convertDate(res.data.created)
                     setUserData(res.data)
             })
         }
@@ -52,6 +143,15 @@ export default function CustomerInstance() {
     return (
         <div id="customerinstance-container">
             <NavBar where="myaccount" />
+
+            {isPopupOpen && (
+                <Popup
+                    title={popupInfos.title}
+                    text={popupInfos.text}
+                    isOpen={isPopupOpen}
+                    onClose={closePopup}
+                />
+            )}
 
             <div id="customerinstance-res">
                 <div id="customerinstance-cat">
@@ -88,13 +188,105 @@ export default function CustomerInstance() {
                         <div id="customeronstance-card">
                             { activeCat === categorys.settings.label ?
                                 <div id="customeronstance-card-settings">
-                                    <FontAwesomeIcon icon={faCircleUser} class="icon" />
+                                    <FontAwesomeIcon icon={faCircleUser} className="icon" />
                                     <span>Personal informations</span>
                                     <div className="line"></div>
-                                    <span>Pseudo <FontAwesomeIcon icon={faArrowRight} /> {userData.user}</span>
-                                    <span>Email <FontAwesomeIcon icon={faArrowRight} /> {userData.email}</span>
-                                    <span>Tel <FontAwesomeIcon icon={faArrowRight} /> {userData.phone}</span>
-                                    <span>Created <FontAwesomeIcon icon={faArrowRight} /> {userData.date}</span>
+
+                                    <div id="customeronstance-card-container">
+                                        <span className="customeronstance-card-info">
+                                            Pseudo
+
+                                            { isPseudoModifier ?
+                                                <div style={{display: "flex", justifyContent: "center", alignItems: "center", gap: "10px"}}>
+                                                    <TextFields
+                                                        min="5"
+                                                        oc={(event) => { handlerRegisterInputs(event, setPseudoModify) }}
+                                                        placeholder={userData.user}
+                                                    />
+                                                    <GenButton text="OK" handler={() => {
+                                                        handleConfirmModification("pseudo")
+                                                    }}/>
+                                                </div>
+                                            :
+                                                <span className="customeronstance-card-info-text">
+                                                    {userData.user}
+                                                </span>
+                                            }
+
+                                            <FontAwesomeIcon
+                                                className="customeronstance-card-info-modify"
+                                                icon={faPen}
+                                                onClick={() => {
+                                                    handleModifier("pseudo")
+                                                }}
+                                            />
+                                        </span>
+
+                                        <span className="customeronstance-card-info">
+                                            Email
+
+                                            { isEmailModifier ?
+                                                <div style={{display: "flex", justifyContent: "center", alignItems: "center", gap: "10px"}}>
+                                                    <TextFields
+                                                        min="5"
+                                                        oc={(event) => { handlerRegisterInputs(event, setEmailModify) }}
+                                                        placeholder={userData.email}
+                                                    />
+                                                    <GenButton text="OK" handler={() => {
+                                                        handleConfirmModification("email")
+                                                    }}/>
+                                                </div>
+                                            :
+                                                <span className="customeronstance-card-info-text">
+                                                    {userData.email}
+                                                </span>
+                                            }
+
+                                            <FontAwesomeIcon
+                                                className="customeronstance-card-info-modify"
+                                                icon={faPen}
+                                                onClick={() => {
+                                                    handleModifier("email")
+                                                }}
+                                            />
+                                        </span>
+
+                                        <span className="customeronstance-card-info">
+                                            Phone
+
+                                            { isPhoneModifier ?
+                                                <div style={{display: "flex", justifyContent: "center", alignItems: "center", gap: "10px"}}>
+                                                    <TextFields
+                                                        min="5"
+                                                        oc={(event) => { handlerRegisterInputs(event, setPhoneModify) }}
+                                                        placeholder={userData.phone}
+                                                    />
+                                                    <GenButton text="OK" handler={() => {
+                                                        handleConfirmModification("phone")
+                                                    }}/>
+                                                </div>
+                                            :
+                                                <span className="customeronstance-card-info-text">
+                                                    {userData.phone}
+                                                </span>
+                                            }
+
+                                            <FontAwesomeIcon
+                                                className="customeronstance-card-info-modify"
+                                                icon={faPen}
+                                                onClick={() => {
+                                                    handleModifier("phone")
+                                                }}
+                                            />
+                                        </span>
+
+                                        <span className="customeronstance-card-info">
+                                            Created
+                                            <span className="customeronstance-card-info-text">
+                                                {userData.created}
+                                            </span>
+                                        </span>
+                                    </div>
                                 </div>
                                 : null}
 

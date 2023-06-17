@@ -249,6 +249,38 @@ app.post("/createItem", async (req, res) => {
     })
 })
 
+app.post("/modifyClientInfos", async (req, res) => {
+    const { token, what, newvalue } = req.body
+
+    if(token && ["pseudo", "email", "phone"].includes(what)) {
+        if(what === "email") {
+            if(!newvalue.includes("@") && !newvalue.includes(".")) {
+                console.log(newvalue)
+                res.json(null)
+                return null
+            }
+        }
+
+        if(what === "phone") {
+            if(!/[0-9+\s]/.test(newvalue)) {
+                res.json(null)
+                return null
+            }
+        }
+
+        const data = await api.modifyClientInfos(token, what, newvalue)
+        console.log(data)
+
+        if(data) {
+            res.json(data)
+        } else {
+            res.json(null)
+        }
+    } else {
+        res.json(null)
+    }
+})
+
 app.listen(PORT, () => {
     console.log(magenta(`?Server ::${PORT} [OK]\n`))
 })

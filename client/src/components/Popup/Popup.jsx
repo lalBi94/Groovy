@@ -1,17 +1,15 @@
+import Modal from "react-modal";
 import "./Popup.scss"
+import GenButton from "../GenButton/GenButton";
 
-export default function Popup({show, title, text, close}) {
-    if (!show) {
-        return null;
-    }
+Modal.setAppElement('#root');
 
+export default function Popup({ isOpen, onClose, title, text }) {
     return (
-        <div className="popup-container">
-            <div className="popup-content">
-                <h3>{ title }</h3>
-                <p>{ text }</p>
-                <button onClick={ close }>Fermer</button>
-            </div>
-        </div>
-    );
+        <Modal className="popup" isOpen={isOpen} onRequestClose={onClose} contentLabel="Popup">
+            <h2>{title}</h2>
+            <p>{text}</p>
+            <GenButton text="Close" handler={onClose} />
+        </Modal>
+    )
 }

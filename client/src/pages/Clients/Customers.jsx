@@ -6,6 +6,7 @@ import GenButton from "../../components/GenButton/GenButton"
 import Popup from "../../components/Popup/Popup"
 import axios from "axios";
 import Cookie from "js-cookie"
+import langages from "./assets/langages.json"
 import {getSHA256} from "../../components/ClientAPI/UtilsAPI"
 
 export default function Customers() {
@@ -16,6 +17,11 @@ export default function Customers() {
 
         document.title = "French Connection | Sign In"
     }, [])
+
+    /**
+     * TODO: Personnal babel
+     * langages["fr"].blabla partout
+     * */
 
     /**
      * @desc Registration
@@ -40,34 +46,19 @@ export default function Customers() {
     /**
      * @desc Popup
      * */
-    const [showPopup, setShowPopup] = useState({
+    const [isPopupOpen, setIsPopupOpen] = useState(false)
+    const [popupInfos, setPopupInfos] = useState({
         title: "",
-        text: "",
-        show: false
+        text: ""
     })
 
-    /**
-     * @desc Display popup
-     * @param { string } title The title of popup
-     * @param { string } text The text of popup
-     * */
-    function handleButtonClick(title, text) {
-        setShowPopup({
-            title: title,
-            text: text,
-            show: true
-        })
+    function openPopup(title, text) {
+        setPopupInfos({ title: title, text: text })
+        setIsPopupOpen(true)
     }
 
-    /**
-     * @desc Remove popup
-     * */
-    function handlePopupClose() {
-        setShowPopup({
-            title: "",
-            text: "",
-            show: false
-        })
+    function closePopup() {
+        setIsPopupOpen(false)
     }
 
     /**
@@ -138,7 +129,7 @@ export default function Customers() {
     }
 
     /**
-     * Connection
+     * @desc log the user
      * */
     async function login() {
         try {
@@ -151,19 +142,19 @@ export default function Customers() {
 
                 if(data.response) {
                     Cookie.set("token", data.token, { expires: logRemember ? 999 : 1 })
-                    handleButtonClick(`Bonjour ${ data.username } !`, "Vous allez etre redirige vers la page d'accueil ...")
+                    openPopup(`Bonjour ${ data.username } !`, "Vous allez etre redirige vers la page d'accueil ...")
                     setTimeout(() => {
                         window.location = "/home"
-                    }, 1500)
+                    }, 2000)
                 } else {
-                    return handleButtonClick("Error", "E-mail or password is wrong");
+                    return openPopup("Error", "E-mail or password is wrong")
                 }
             } else {
-                return handleButtonClick("Error CAPTCHA", "Wrong answer.")
+                return openPopup("Error CAPTCHA", "Wrong answer.")
             }
         } catch(err) {
             console.error(err)
-            return handleButtonClick("Error!", "An error occurred.")
+            return openPopup("Error!", "An error occurred.")
         }
     }
 
@@ -172,15 +163,17 @@ export default function Customers() {
      * */
     async function register() {
         if (passwordConf !== password) {
-            return handleButtonClick("Error !", "Passwords must be same.")
+            return openPopup("Error !", "Passwords must be same.")
         } if (!email.includes("@") || !email.includes(".")) {
-            return handleButtonClick("Error !", "An email must contain an @ and a dot.")
+            return openPopup("Error !", "An email must contain an @ and a dot.")
         } if (password.length < 3) {
-            return handleButtonClick("Error !", "Password must be 15 characters long.")
+            return openPopup("Error !", "Password must be 15 characters long.")
         } if ([email, username, phone].some((data) => data.length === 0)) {
-            return handleButtonClick("Error !", "All fields must be filled in.")
+            return openPopup("Error !", "All fields must be filled in.")
         } if(logCaptcha.res !== parseInt(logCaptchaSolution)) {
-            return handleButtonClick("Error CAPTCHA !", "Wrong answer.")
+            return openPopup("Error CAPTCHA !", "Wrong answer.")
+        } if(username.length > 5) {
+            return openPopup("Error !", "A pseudo must be contains 5 letters.")
         }
 
         try {
@@ -194,16 +187,19 @@ export default function Customers() {
             const registerData = await register.data;
 
             if(registerData.response) {
-                return handleButtonClick("Success!", "Account created.");
+                return openPopup("Success!", "Account created.")
             } else {
-                return handleButtonClick("Error!", "Someone has already registered with this email/username.");
+                return openPopup("Error!", "Someone has already registered with this email/username.")
             }
         } catch(err) {
-            console.error(err);
-            return handleButtonClick("Error!", "An error occurred.");
+            console.error(err)
+            return openPopup("Error!", "An error occurred.")
         }
     }
 
+    /**
+     * @desc Change the state of remember client
+     * */
     function handlerRemember() {
         setLogRemember(!logRemember)
     }
@@ -212,12 +208,14 @@ export default function Customers() {
         <div id="customers-container">
             <NavBar where="signin"/>
 
-            <Popup
-                show={ showPopup.show }
-                title={ showPopup.title }
-                text={ showPopup.text }
-                close={ handlePopupClose }
-            />
+            {isPopupOpen && (
+                <Popup
+                    title={popupInfos.title}
+                    text={popupInfos.text}
+                    isOpen={isPopupOpen}
+                    onClose={closePopup}
+                />
+            )}
 
             <div id="customers-form-container">
                 <div id="customers-form-connexion">

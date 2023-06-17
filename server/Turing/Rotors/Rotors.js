@@ -10,6 +10,61 @@ export default class Rotors {
     }
 
     /**
+     * @desc Modify client info
+     * @param { string } token The user token
+     * @param { string } what The info
+     * @param { string } newvalue The new value
+     * @return { Promise<{}> } New customers info
+     * */
+    modifyClientInfos(token, what, newvalue) {
+        return new Promise(async (resolve, reject) => {
+            switch(what) {
+                case "pseudo": case "email": {
+                    const exist = await this.isUserExist(newvalue)
+
+                    if(!exist) {
+                        this.database.query(
+                            what === "pseudo" ? "UPDATE users SET user=? WHERE token=?" : "UPDATE users SET email=? WHERE token=?",
+                            [newvalue, token], async (err, res, fields) => {
+                                if(err) {
+                                    console.log(red(err))
+                                    resolve(false)
+                                } else {
+                                    const newUserData = await this.getUserData(token)
+                                    resolve(newUserData)
+                                }
+                            })
+                    } else {
+                        resolve(false)
+                    }
+
+                    break;
+                }
+
+                case "phone": {
+                    this.database.query(
+                        "UPDATE users SET phone=? WHERE token=?",
+                        [newvalue, token], async (err, res, fields) => {
+                            if(err) {
+                                console.log(red(err))
+                                resolve(false)
+                            } else {
+                                const newUserData = await this.getUserData(token)
+                                resolve(newUserData)
+                            }
+                        }
+                    )
+                    break;
+                }
+
+                default: {
+                    break;
+                }
+            }
+        })
+    }
+
+    /**
      * @desc Search if user exist
      * @param { string } id Email / Username
      * @return { Promise } True if exist and false if not exit
@@ -17,8 +72,8 @@ export default class Rotors {
     isUserExist(id) {
         return new Promise((resolve, reject) => {
             this.database.query(
-                "SELECT id FROM users WHERE email=? OR user=?",
-                [id, id], (err, res, fields) => {
+                "SELECT id FROM users WHERE email=? OR user=? OR token=?",
+                [id, id, id], (err, res, fields) => {
                     resolve(res.length > 0)
                 }
             )

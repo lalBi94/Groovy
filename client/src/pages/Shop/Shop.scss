@@ -135,6 +135,15 @@
             gap: 8px;
             position: relative;
 
+            #shop-burger-filters {
+                color: black;
+                cursor: pointer;
+
+                :hover {
+                    color: $secondary_color;
+                }
+            }
+
             #shop-searching {
                 display: flex;
                 justify-content: center;
